@@ -11,7 +11,7 @@ Bootstrap script is downloaded, since it causes problems when fetched (particall
 
 To start:
 
-```ShellSession
+```sh-session
 $ git clone https://github.com/nolar/vagrant-saltstack-docker-sample.git
 $ cd vagrant-saltstack-docker-sample
 $ vagrant up
@@ -19,7 +19,7 @@ $ vagrant up
 
 Wait approx 8-10 mins while provisioning is going. If needed, retry:
 
-```ShellSession
+```sh-session
 $ vagrant provision
 
 # OR
@@ -30,7 +30,7 @@ $ vagrant provision minion1
 
 Manual salting via master VM:
 
-```ShellSession
+```sh-session
 $ ./vsalt '*' test.ping
 master:
     True
@@ -41,7 +41,7 @@ Connection to 127.0.0.1 closed.
 
 To dive inside:
 
-```ShellSession
+```sh-session
 $ vagrant ssh minion
 ```
 
