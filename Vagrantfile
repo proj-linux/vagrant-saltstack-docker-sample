@@ -23,9 +23,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.define "vm01" do |vm01|
-    config.vm.network :private_network, ip: "192.168.33.100"
-  end
+  #config.vm.define "vm01" do |vm01|
+  #  config.vm.network :private_network, ip: "192.168.33.100"
+  #end
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -118,14 +118,58 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   #   chef.validation_client_name = "ORGNAME-validator"
 
+  config.vm.define "master", primary: true do |config|
+    config.vm.network :private_network, ip: "192.168.33.100"
+    config.vm.hostname = "master"
 
-  config.vm.provision "salt" do |salt|
-    #salt.install_type = "git"
-    salt.minion_config = "minion.cfg"
-    salt.minion_key = "minion.pem"
-    salt.minion_pub = "minion.pub"
-    salt.run_highstate = true
-    salt.colorize = true
-    salt.log_level = "debug"
+    config.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "512"]
+    end
+
+    config.vm.provision "salt" do |salt|
+      #salt.always_install = true
+      salt.bootstrap_script = "bootstrap-salt.sh"
+      salt.bootstrap_options = ""
+      salt.install_type = "git"
+      salt.install_args = "develop"
+
+      salt.install_master = true
+      salt.master_config = "master.cfg"
+      salt.master_key = "master.pem"
+      salt.master_pub = "master.pub"
+      salt.seed_master = { minion: "minion1.pub", master: "minion0.pub" }
+
+      #salt.no_minion = true
+      salt.minion_config = "minion.cfg"
+      salt.minion_key = "minion0.pem"
+      salt.minion_pub = "minion0.pub"
+      salt.run_highstate = true
+
+      salt.colorize = true
+      salt.log_level = "debug"
+    end
   end
+
+  #tryme: 2 or 3 minions, just for fun.
+  config.vm.define "minion" do |config|
+    config.vm.network :private_network, ip: "192.168.33.101"
+    config.vm.hostname = "minion"
+
+    config.vm.provision "salt" do |salt|
+      #salt.always_install = true
+      salt.bootstrap_script = "bootstrap-salt.sh"
+      salt.bootstrap_options = ""
+      salt.install_type = "git"
+      salt.install_args = "develop"
+
+      salt.minion_config = "minion.cfg"
+      salt.minion_key = "minion1.pem"
+      salt.minion_pub = "minion1.pub"
+      salt.run_highstate = true
+
+      salt.colorize = true
+      salt.log_level = "debug"
+    end
+  end
+
 end
