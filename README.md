@@ -28,10 +28,15 @@ $ vagrant provision master
 $ vagrant provision minion1
 ```
 
-Manual salting on master VM:
+Manual salting via master VM:
 
 ```ShellSession
 $ ./vsalt '*' test.ping
+master:
+    True
+minion:
+    True
+Connection to 127.0.0.1 closed.
 ```
 
 To dive inside:
