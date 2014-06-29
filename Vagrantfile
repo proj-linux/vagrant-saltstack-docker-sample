@@ -126,6 +126,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm", :id, "--memory", "512"]
     end
 
+    config.vm.synced_folder "roots/", "/srv/salt/"
+
     config.vm.provision "salt" do |salt|
       #salt.always_install = true
       salt.bootstrap_script = "bootstrap-salt.sh"
@@ -143,7 +145,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_config = "minion.cfg"
       salt.minion_key = "minion0.pem"
       salt.minion_pub = "minion0.pub"
-      salt.run_highstate = false
+      salt.run_highstate = true
 
       salt.colorize = true
       salt.log_level = "debug"
@@ -165,7 +167,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_config = "minion.cfg"
       salt.minion_key = "minion1.pem"
       salt.minion_pub = "minion1.pub"
-      salt.run_highstate = false
+      salt.run_highstate = true
 
       salt.colorize = true
       salt.log_level = "debug"

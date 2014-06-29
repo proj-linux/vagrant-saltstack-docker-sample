@@ -5,7 +5,7 @@ Just a personal playground for a unified dev/prod env & deployment scripts. Late
 
 This installation has 2 Vagrant VMs names "master" and "minion". Master is the primary and can be `vagrant ssh` without name specification.
 
-Master VM also has its own minion (minion0), so it can be configured as a normal salted machine.
+Master VM is also a minion to itself (minion0), so it can be configured as a normal salted machine.
 
 Bootstrap script is downloaded, since it causes problems when fetched (partically downloaded, thus bootstraping errors).
 
@@ -25,10 +25,10 @@ $ vagrant provision
 # OR
 
 $ vagrant provision master
-$ vagrant provision minion1
+$ vagrant provision minion
 ```
 
-Manual salting via master VM:
+There is a vsalt shortcut script - it calls salt on a master VM transparently, so you do not to install salt on your dev machine.
 
 ```sh-session
 $ ./vsalt '*' test.ping
@@ -39,17 +39,37 @@ minion:
 Connection to 127.0.0.1 closed.
 ```
 
-To dive inside:
+Run highstate when needed (e.g., when states/pillar has changed). This step is included in bootstraping.
 
 ```sh-session
+$ ./vsalt '*' state.highstate
+```
+
+Check that both nodes have nginx installed:
+
+* http://192.168.3.100/ - master
+* http://192.168.3.101/ - minion
+
+To dive inside the VMs:
+
+```sh-session
+$ vagrant ssh # (master is implied as primary vm)
+$ exit
+
+$ vagrant ssh master
+$ sudo salt-call --grains
+$ exit
+
 $ vagrant ssh minion
+$ sudo salt-call --grains
+$ exit
 ```
 
 
 TODO
 ====
 
-* Add docker containers.
+* Add docker containers for the application.
 * Move files around for a beautiful layout.
-* Re-provisioning hangs on stop/start salt-master. Probably a bug in salt/initctl/etc.
-* Try docker provider to save some memory.
+* Re-provisioning hangs on stop/start salt-master. Probably a bug in saltstack/bootstrap/initctl/etc.
+* Try docker provider to save some memory (causes a lot of issues if just switched).
