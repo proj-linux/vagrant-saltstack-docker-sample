@@ -143,7 +143,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_config = "minion.cfg"
       salt.minion_key = "minion0.pem"
       salt.minion_pub = "minion0.pub"
-      salt.run_highstate = true
+      salt.run_highstate = false
 
       salt.colorize = true
       salt.log_level = "debug"
@@ -165,7 +165,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_config = "minion.cfg"
       salt.minion_key = "minion1.pem"
       salt.minion_pub = "minion1.pub"
-      salt.run_highstate = true
+      salt.run_highstate = false
 
       salt.colorize = true
       salt.log_level = "debug"
