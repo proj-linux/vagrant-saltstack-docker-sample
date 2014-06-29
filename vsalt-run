@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# SaltStack wrapper to call `salt` command on a Salt Master inside Vagrant, so we could avoid installing it on a dev machine.
+# Salt Master VM should be either primary, or the only one -- so that `vagrant ssh` works without name specification.
+#
+# Same task can also be done with pepper (pre-alpha) & salt-api, though it needs additional configuration.
+#
+
+
+#NB: Trick with the quotes, so all args, even would-be-globs ('*') go unchanged inside -c "..." single arg.
+
+cmd="sudo salt-run"
+
+for arg; do
+    cmd="${cmd} '${arg}'"
+done
+
+vagrant ssh -c "$cmd"

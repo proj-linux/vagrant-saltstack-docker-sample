@@ -50,7 +50,7 @@ Check that both nodes have nginx installed:
 * http://192.168.3.100/ - master
 * http://192.168.3.101/ - minion
 
-To dive inside the VMs:
+To dive inside the VMs (note, master has no docker):
 
 ```sh-session
 $ vagrant ssh # (master is implied as primary vm)
@@ -62,6 +62,9 @@ $ exit
 
 $ vagrant ssh minion
 $ sudo salt-call --grains
+$ docker images
+$ docker ps -a
+$ docker attach timer_cont #NB: CtrlC kills the container
 $ exit
 ```
 
