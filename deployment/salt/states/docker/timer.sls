@@ -1,6 +1,6 @@
 ubuntu:
     docker.pulled:
-        - name: "ubuntu:14.04"
+        - name: {{ pillar['baseimage'] }}
 
 
 
@@ -15,8 +15,8 @@ dockerfiles:
         - name: /app/timer/Dockerfile
         - source: salt://docker/Dockerfile
         - template: jinja
-        - defaults:
-            baseimage: ubuntu:14.04
+        - context:
+            baseimage: {{ pillar['baseimage'] }}
         #TODO: use names: here for multiple files, or make a cycle.
         - require: 
             - file: dockerdir
