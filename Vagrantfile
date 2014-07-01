@@ -126,25 +126,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm", :id, "--memory", "512"]
     end
 
-    config.vm.synced_folder "roots/", "/srv/salt/"
+    config.vm.synced_folder "deployment/salt/states/", "/srv/salt/"
+    config.vm.synced_folder "deployment/salt/pillar/", "/srv/pillar/"
 
     config.vm.provision "salt" do |salt|
       #salt.always_install = true
-      salt.bootstrap_script = "bootstrap-salt.sh"
+      salt.bootstrap_script = "deployment/salt/bootstrap-salt.sh"
       salt.bootstrap_options = ""
       salt.install_type = "git"
       salt.install_args = "develop"
 
       salt.install_master = true
-      salt.master_config = "master.cfg"
-      salt.master_key = "master.pem"
-      salt.master_pub = "master.pub"
-      salt.seed_master = { minion: "minion1.pub", master: "minion0.pub" }
+      salt.master_config = "deployment/salt/master.cfg"
+      salt.master_key = "deployment/salt/keys/master.pem"
+      salt.master_pub = "deployment/salt/keys/master.pub"
+      salt.seed_master = { minion: "deployment/salt/keys/minion1.pub", master: "deployment/salt/keys/minion0.pub" }
 
       #salt.no_minion = true
-      salt.minion_config = "minion.cfg"
-      salt.minion_key = "minion0.pem"
-      salt.minion_pub = "minion0.pub"
+      salt.minion_config = "deployment/salt/minion.cfg"
+      salt.minion_key = "deployment/salt/keys/minion0.pem"
+      salt.minion_pub = "deployment/salt/keys/minion0.pub"
       salt.run_highstate = true
 
       salt.colorize = true
@@ -159,14 +160,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.provision "salt" do |salt|
       #salt.always_install = true
-      salt.bootstrap_script = "bootstrap-salt.sh"
+      salt.bootstrap_script = "deployment/salt/bootstrap-salt.sh"
       salt.bootstrap_options = ""
       salt.install_type = "git"
       salt.install_args = "develop"
 
-      salt.minion_config = "minion.cfg"
-      salt.minion_key = "minion1.pem"
-      salt.minion_pub = "minion1.pub"
+      salt.minion_config = "deployment/salt/minion.cfg"
+      salt.minion_key = "deployment/salt/keys/minion1.pem"
+      salt.minion_pub = "deployment/salt/keys/minion1.pub"
       salt.run_highstate = true
 
       salt.colorize = true

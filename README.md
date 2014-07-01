@@ -1,13 +1,13 @@
 Playground for Vagrant & SaltStack & Docker
 ===========================================
 
-Just a personal playground for a unified dev/prod env & deployment scripts. Later, here will come a Docker orchestrator.
+Just a personal playground for a unified dev/prod env & deployment scripts. Later, here will come a Docker orchestrator and a sample application. Maybe.
 
-This installation has 2 Vagrant VMs names "master" and "minion". Master is the primary and can be `vagrant ssh` without name specification.
+This installation has 2 Vagrant VMs named "master" and "minion". Master is the primary VM and can be used as `vagrant ssh` without name specification.
 
 Master VM is also a minion to itself (minion0), so it can be configured as a normal salted machine.
 
-Bootstrap script is downloaded, since it causes problems when fetched (partically downloaded, thus bootstraping errors).
+Bootstrap script is prefetched, since fetching causes problems sometimes, and provisioning fails (partially downloaded script).
 
 To start:
 
@@ -17,7 +17,7 @@ $ cd vagrant-saltstack-docker-sample
 $ vagrant up
 ```
 
-Wait approx 8-10 mins while provisioning is going. If needed, retry:
+Wait approx 8-10 mins while bootstraping & provisioning is going. If needed, retry:
 
 ```sh-session
 $ vagrant provision
@@ -28,7 +28,7 @@ $ vagrant provision master
 $ vagrant provision minion
 ```
 
-There is a vsalt shortcut script - it calls salt on a master VM transparently, so you do not to install salt on your dev machine.
+There is a ./vsalt shortcut script - it calls salt on a master VM transparently, so you do not need to install salt on your dev machine.
 
 ```sh-session
 $ ./vsalt '*' test.ping
@@ -72,7 +72,5 @@ $ exit
 TODO
 ====
 
-* Add docker containers for the application.
-* Move files around for a beautiful layout.
 * Re-provisioning hangs on stop/start salt-master. Probably a bug in saltstack/bootstrap/initctl/etc.
 * Try docker provider to save some memory (causes a lot of issues if just switched).
